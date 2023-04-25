@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="reset.css">
+    <title>Nuster</title>
+</head>
+
+<body>
+    <div class="loader" id="loader">
+        <img src="/src/main/java/com/client/assets/nuster.png" alt="nuster logo">
+    </div>
+    <form action="/add" class="content new_post">
+        <div class="container">
+            <div method="post" class="create_post left">
+                <div class="image_input">
+                    <p>Add Post Image</p>
+                </div>
+                <input type="text" placeholder="Post Title" id="post_title">
+                <textarea name="post_text" id="post_text" placeholder="Post Text"></textarea>
+                <button id="create_post">Create Post</button>
+            </div>
+            <div class="right">
+                <div class="right_container">
+                    <div class="image_preview"></div>
+                    <p class="title_preview"></p>
+                    <p class="text_preview"></p>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="login-wrapper login_wrapper">
+        <form action="/login" class="login-form">
+            <div class="login-header">
+                <img src="/src/main/java/com/client/assets/nuster.png" alt="">
+                <p>Login to interact and share ideas with fellow learners.</p>
+            </div>
+            <input type="text" class="username-input" placeholder="Username">
+            <input type="password" class="password-input" placeholder="Password">
+            <button class="login-btn">Login</button>
+            <p class="register-link">Don't have an account yet? <span class="create_user">Create new account</span></p>
+        </form>
+    </div>
+
+    <div class="register-wrapper register_wrapper">
+        <form action="" class="register-form">
+            <div class="register-header">
+                <img src="/src/main/java/com/client/assets/nuster.png" alt="">
+                <p>Register to interact and share ideas with fellow learners.</p>
+            </div>
+            <input type="text" class="name-input" placeholder="Name">
+            <input type="text" class="surname-input" placeholder="Surname">
+            <input type="text" class="usernameinput" placeholder="Username">
+            <input type="password" class="passwordinput" placeholder="Password">
+            <button class="register-btn">Register</button>
+            <p class="login-link">Already have an account? <span class="login">Login</span></p>
+        </form>
+    </div>
+
+
+    <div class="container">
+        <div class="left_container">
+            <div class="left_aside">
+
+                <div class="left_buttons">
+                    <div class="home"><img src="/src/main/java/com/client/assets/home.png" alt="home">Home</div>
+                    <div class="trending"><img src="/src/main/java/com/client/assets/trending.png"
+                            alt="trending">Trending Posts
+                    </div>
+                </div>
+            </div>
+            <button class="add_post">
+                <img src="/src/main/java/com/client/assets/add.png" alt="Add post" />
+            </button>
+        </div>
+
+        <div class="top_nav">
+            <form class="form">
+                <input type="search" class="search_input" placeholder="Search">
+                <button class="search"><img src="/src/main/java/com/client/assets/search.png" alt=""></button>
+            </form>
+            <div class="date_time">
+                <p class="date"></p>
+                <p class="time"></p>
+            </div>
+        </div>
+        <div class="content_container">
+            <div class="post_container" id="post_container"></div>
+            <div class="right_aside">
+                <div class="user"></div>
+                <div class="post_stats"></div>
+            </div>
+        </div>
+    </div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script src="/src/main/java/com/client/scripts/script.js"></script>
+    <script src="/src/main/java/com/client/scripts/login-register.js"></script>
+    <script src="/src/main/java/com/client/scripts/posts.js"></script>
+    <script src="/src/main/java/com/client/scripts/filter.js"></script>
+    <script src="/src/main/java/com/client/scripts/createPost.js"></script>
+</body>
+
+</html>
