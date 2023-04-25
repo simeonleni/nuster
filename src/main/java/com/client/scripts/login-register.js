@@ -68,6 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } catch (error) {
                 console.error(error);
             }
+            loginWrapper.style.display = "none";
         });
 
         createUserBtn.addEventListener("click", () => {
@@ -82,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const surnameInput = document.querySelector('.surname-input');
         const usernameInput = document.querySelector('.usernameinput');
         const passwordInput = document.querySelector('.passwordinput');
-        const loginBtn = document.querySelector('.login-btn');
+        const loginBtn = document.querySelector('.login');
         const loginWrapper = document.querySelector('.login-wrapper');
         const registerWrapper = document.querySelector('.register-wrapper');
 
