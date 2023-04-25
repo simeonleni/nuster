@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const foundPassword = userData.some(
                     (user) => user.password === password
                 );
-
+                console.log(foundUser)
                 usernameInput.style.border = foundUser
                     ? "1px solid green"
                     : "1px solid red";
@@ -64,14 +64,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 if (foundUser && foundPassword) {
                     newSession(session, username);
+                    loginWrapper.style.display = "none";
                 }
             } catch (error) {
                 console.error(error);
             }
-            loginWrapper.style.display = "none";
+
         });
 
         createUserBtn.addEventListener("click", () => {
+            registerHandler()
             loginWrapper.style.display = "none";
             registerWrapper.style.display = "flex";
         });
@@ -79,20 +81,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const registerHandler = () => {
         const registerForm = document.querySelector(".register-form");
-        const nameInput = document.querySelector('.name-input');
-        const surnameInput = document.querySelector('.surname-input');
-        const usernameInput = document.querySelector('.usernameinput');
-        const passwordInput = document.querySelector('.passwordinput');
-        const loginBtn = document.querySelector('.login');
-        const loginWrapper = document.querySelector('.login-wrapper');
-        const registerWrapper = document.querySelector('.register-wrapper');
+        const nameInput = document.querySelector(".name-input");
+        const surnameInput = document.querySelector(".surname-input");
+        const usernameInput = document.querySelector(".usernameinput");
+        const passwordInput = document.querySelector(".passwordinput");
+        const loginBtn = document.querySelector(".login");
+        const loginWrapper = document.querySelector(".login-wrapper");
+        const registerWrapper = document.querySelector(".register-wrapper");
 
-        loginBtn.addEventListener('click', () => {
+        loginBtn.addEventListener("click", () => {
             loginWrapper.style.display = "flex";
             registerWrapper.style.display = "none";
         });
 
-        registerForm.addEventListener('submit', (e) => {
+        registerForm.addEventListener("submit", (e) => {
             e.preventDefault();
 
             const name = nameInput.value.trim();
@@ -101,15 +103,33 @@ document.addEventListener("DOMContentLoaded", () => {
             const password = passwordInput.value.trim();
 
             if (name === "" || surname === "" || username === "" || password === "") {
-                [nameInput, surnameInput, usernameInput, passwordInput].forEach(input => {
-                    input.style.border = input.value.trim() === "" ? "1px solid red" : "1px solid green";
-                });
+                [nameInput, surnameInput, usernameInput, passwordInput].forEach(
+                    (input) => {
+                        input.style.border =
+                            input.value.trim() === "" ? "1px solid red" : "1px solid green";
+                    }
+                );
             } else {
-                newUser(name, surname, username, password);
+                axios.get('http://localhost:8080/users')
+                    .then(response => {
+                        const userList = response.data;
+                        for (let i = 0; i < userList.length; i++) {
+                            if (userList[i].username === username) {
+                                usernameInput.style.border = "1px solid red";
+                                return;
+                            }
+                        }
+                        usernameInput.style.border = "1px solid green";
+                        newUser(name, surname, username, password);
+                        registerWrapper.style.display = "none";
+                        loginHandler();
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
             }
         });
     };
-
     axios.get('http://localhost:8080/session')
         .then(response => {
             const sessionList = response.data.length;

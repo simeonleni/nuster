@@ -1,65 +1,104 @@
-const imageInput = document.querySelector('.image_input');
-const post_text = document.querySelector('#post_text');
-const post_title = document.querySelector('#post_title');
-const new_post = document.querySelector('.new_post');
-const add_post = document.querySelector('.add_post');
-const content = document.querySelector('.content');
-const right = document.querySelector('.right');
-
-const image_preview = document.querySelector('.image_preview');
-const title_preview = document.querySelector('.title_preview');
-const text_preview = document.querySelector('.text_preview');
-
-const fileInput = document.createElement('input');
-fileInput.type = 'file';
-fileInput.accept = 'image/*';
-
 const elements = {
-    imageInput,
-    post_text,
-    post_title,
-    new_post,
-    add_post,
-    content,
-    right,
-    image_preview,
-    title_preview,
-    text_preview,
-    fileInput,
+    imageInput: document.querySelector('.image_input'),
+    postText: document.querySelector('#post_text'),
+    postTitle: document.querySelector('#post_title'),
+    newPost: document.querySelector('.new_post'),
+    addPost: document.querySelector('.add_post'),
+    content: document.querySelector('.content'),
+    right: document.querySelector('.right'),
+    imagePreview: document.querySelector('.image_preview'),
+    titlePreview: document.querySelector('.title_preview'),
+    textPreview: document.querySelector('.text_preview'),
+    fileInput: document.createElement('input'),
+};
+
+const userAgent = navigator.userAgent;
+const currentSession = userAgent.toString().replace(/\s/g, '');
+let title = '';
+let imageBytes = '';
+let description = '';
+
+elements.fileInput.type = 'file';
+elements.fileInput.accept = 'image/*';
+
+const sessionUser = async () => {
+    try {
+        const response = await axios.get('http://localhost:8080/session');
+        const sessionList = response.data.length;
+        const sessionData = response.data;
+
+        for (let i = 0; i < sessionList; i++) {
+            if (sessionData[i].session === currentSession) {
+                const username = sessionData[i].user;
+                return anotherFunction(username);
+            }
+        }
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+const anotherFunction = (username) => {
+    return username;
+};
+
+const addPost = (title, creator, image, descriptions) => {
+    const postData = {
+        title: title,
+        creator: creator,
+        postImage: image,
+        descriptions: descriptions,
+    };
+
+    axios
+        .post('http://localhost:8080/add/post', postData)
+        .then(() => { })
+        .catch((error) => {
+            console.error(error);
+        });
 };
 
 // add event listeners
-imageInput.addEventListener('click', () => {
-    fileInput.click();
+elements.imageInput.addEventListener('click', () => {
+    elements.fileInput.click();
 });
 
-post_text.addEventListener('input', () => {
-    const text = post_text.value;
-    text_preview.textContent = text;
+elements.postText.addEventListener('input', () => {
+    const text = elements.postText.value;
+    elements.textPreview.textContent = text;
+    description = text;
 });
 
-post_title.addEventListener('input', () => {
-    const text = post_title.value;
-    title_preview.textContent = text;
+elements.postTitle.addEventListener('input', () => {
+    const text = elements.postTitle.value;
+    elements.titlePreview.textContent = text;
+    title = text;
 });
 
-new_post.addEventListener('submit', (e) => {
-    new_post.reset();
-    content.classList.toggle('add_toggle');
+elements.newPost.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const creator = await sessionUser();
+    console.log(title)
+    console.log(imageBytes)
+    addPost(title, creator, imageBytes, description);
+    elements.newPost.reset();
+    elements.content.classList.toggle('add_toggle');
 });
 
-add_post.addEventListener('click', () => {
-    content.classList.toggle('add_toggle');
+elements.addPost.addEventListener('click', () => {
+    elements.content.classList.toggle('add_toggle');
 });
 
-fileInput.addEventListener('change', () => {
-    const file = fileInput.files[0];
+elements.fileInput.addEventListener('change', () => {
+    const file = elements.fileInput.files[0];
     const reader = new FileReader();
     reader.onload = () => {
-        image_preview.style.backgroundImage = `url('${reader.result}')`;
-        right.style.display = 'block';
+        elements.imagePreview.style.backgroundImage = `url('${reader.result}')`;
+        imageBytes = reader.result.toString();
+        elements.right.style.display = 'block';
     };
+
     reader.readAsDataURL(file);
 });
 
-text_preview.style.whiteSpace = 'pre-wrap';
+elements.textPreview.style.whiteSpace = 'pre-wrap';
