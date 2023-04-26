@@ -78,12 +78,15 @@ elements.postTitle.addEventListener('input', () => {
 elements.newPost.addEventListener('submit', async (e) => {
     e.preventDefault();
     const creator = await sessionUser();
-    console.log(title)
-    console.log(imageBytes)
-    addPost(title, creator, imageBytes, description);
-    elements.newPost.reset();
-    elements.content.classList.toggle('add_toggle');
+
+    if (!(title === "" && description === "")) {
+        elements.content.classList.toggle('add_toggle');
+        addPost(title, creator, imageBytes, description);
+        elements.newPost.reset();
+        window.location.reload(true);
+    }
 });
+
 
 elements.addPost.addEventListener('click', () => {
     elements.content.classList.toggle('add_toggle');
