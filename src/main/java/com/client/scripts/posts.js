@@ -175,36 +175,56 @@ window.onload = function () {
         return text_post;
 
     }
+    const posts = () => {
+        axios.get("http://localhost:8080/posts").then(postResponse => {
+            const poster = async (user) => {
+                const userResponse = await axios.get("http://localhost:8080/users");
+                const length = userResponse.data.length;
+                const data = userResponse.data;
+                for (let i = 0; i < length; i++) {
+                    if (data[i].username === user) {
+                        const userobject = {
+                            username: data[i].username,
+                            name: `${data[i].name} ${data[i].surname}`
+                        };
+                        return userobject;
+                    }
+                }
+                return null;
+            };
 
+            for (let i = 0; i < postResponse.data.length; i++) {
+                const user = postResponse.data[i].creator;
+                poster(user).then(userobject => {
+                    var left_aside = document.querySelector(".left_aside");
+                    var post_supports = 0;
+                    var post_oppose = 0;
+                    let postTitle = postResponse.data[i].title;
+                    let postImg = postResponse.data[i].postImage;
+                    let postDescription = postResponse.data[i].descriptions;
+                    let profilePic = "https://thumbs.dreamstime.com/b/default-avatar-photo-placeholder-profile-picture-default-avatar-photo-placeholder-profile-picture-eps-file-easy-to-edit-125707135.jpg";
+                    let studentHandle = userobject.username;
+                    let studentName = userobject.name;
 
+                    let postElement;
+                    if (postResponse.data[i].postImage === "") {
+                        postElement = text_post_module(postTitle, postDescription, post_supports, post_oppose, profilePic, studentHandle, studentName);
+                    } else {
+                        postElement = image_post_module(postImg, postTitle, postDescription, post_supports, post_oppose, profilePic, studentHandle, studentName);
+                    }
 
-    const postImg = "https://images.unsplash.com/photo-1661956601030-fdfb9c7e9e2f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1042&q=80";
-    const postDescription = `Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea quod ut amet accusantium,
-    maiores sed optio odio sint earum reprehenderit consequuntur impedit ex saepe libero
-    `;
-    const postTitle = 'Lorem ipsum dolor sit amet consectetur';
+                    postElement.addEventListener("click", () => {
+                        alert(`Post ID: ${postResponse.data[i].id}, Post Title: ${postResponse.data[i].title}`);
+                    });
 
+                    document.querySelector("#post_container").appendChild(postElement);
+                });
 
+            }
+        });
+    };
 
-    const profilePic = "https://thumbs.dreamstime.com/b/default-avatar-photo-placeholder-profile-picture-default-avatar-photo-placeholder-profile-picture-eps-file-easy-to-edit-125707135.jpg";
-    const studentHandle = "simeonleni";
-    const studentName = "Simeon Tuyoleni";
-
-
-
-    const left_aside = document.querySelector(".left_aside");
-    left_aside.appendChild(post_user_module(profilePic, studentHandle, studentName))
-
-
-
-    const post_supports = 0;
-    const post_oppose = 0;
-
-
-    for (let index = 0; index < 10; index++) {
-        document.querySelector("#post_container").appendChild(image_post_module(postImg, postTitle, postDescription, post_supports, post_oppose, profilePic, studentHandle, studentName));
-        document.querySelector("#post_container").appendChild(text_post_module(postTitle, postDescription, post_supports, post_oppose, profilePic, studentHandle, studentName))
-    }
+    posts();
 
 }
 
