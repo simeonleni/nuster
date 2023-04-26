@@ -104,6 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
             registerWrapper.style.display = "flex";
         });
     };
+
     const registerHandler = () => {
         const registerForm = document.querySelector(".register-form");
         const nameInput = document.querySelector(".name-input");
@@ -112,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const passwordInput = document.querySelector(".passwordinput");
         const loginBtn = document.querySelector(".login");
         const loginWrapper = document.querySelector(".login-wrapper");
-        const registerWrapper = document.querySelector(".register-wrapper");
+        const registerWrapper = document.querySelector(".register_wrapper");
 
         loginBtn.addEventListener("click", () => {
             loginWrapper.style.display = "flex";
@@ -120,7 +121,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         registerForm.addEventListener("submit", (e) => {
-            alert(image);
             e.preventDefault();
             const name = nameInput.value.trim();
             const surname = surnameInput.value.trim();
@@ -128,13 +128,15 @@ document.addEventListener("DOMContentLoaded", () => {
             const password = passwordInput.value.trim();
 
             if (name === "" || surname === "" || username === "" || password === "") {
-                [nameInput, surnameInput, usernameInput, passwordInput].forEach((input) => {
-                    input.style.border = input.value.trim() === "" ? "1px solid red" : "1px solid green";
-                });
+                [nameInput, surnameInput, usernameInput, passwordInput].forEach(
+                    (input) => {
+                        input.style.border =
+                            input.value.trim() === "" ? "1px solid red" : "1px solid green";
+                    }
+                );
             } else {
-                axios
-                    .get("http://localhost:8080/users")
-                    .then((response) => {
+                axios.get('http://localhost:8080/users')
+                    .then(response => {
                         const userList = response.data;
                         for (let i = 0; i < userList.length; i++) {
                             if (userList[i].username === username) {
@@ -144,30 +146,16 @@ document.addEventListener("DOMContentLoaded", () => {
                         }
                         usernameInput.style.border = "1px solid green";
 
-                        const appUser = {
-                            username: username,
-                            image: image,
-                            name: name,
-                            surname: surname,
-                            password: password,
-                        };
-                        axios
-                            .post("http://localhost:8080/add/user", appUser)
-                            .then((response) => {
-                                registerWrapper.style.display = "none";
-                                loginHandler();
-                            })
-                            .catch((error) => {
-                                console.error(error);
-                            });
+                        newUser(name, image, surname, username, password);
+                        registerWrapper.style.display = "none";
+                        loginHandler();
                     })
-                    .catch((error) => {
+                    .catch(error => {
                         console.error(error);
                     });
             }
         });
     };
-
     axios.get('http://localhost:8080/session')
         .then(response => {
             const sessionList = response.data.length;
