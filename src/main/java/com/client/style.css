@@ -56,6 +56,11 @@ body {
     background-color: rgb(255, 255, 255);
 }
 
+.left_aside>.logo>img {
+    width: 120px;
+    margin: 10px 30px;
+}
+
 .card {
     height: 60px;
     padding: 10px;
@@ -84,6 +89,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+
 }
 
 .student_card>.user_picture>img {
@@ -91,6 +97,9 @@ body {
     max-height: 100%;
     border-radius: 50%;
     object-fit: contain;
+    background: url("https://thumbs.dreamstime.com/b/default-avatar-photo-placeholder-profile-picture-default-avatar-photo-placeholder-profile-picture-eps-file-easy-to-edit-125707135.jpg");
+    background-position: center;
+    background-size: contain;
 }
 
 .student_card>.user_detail {
@@ -232,6 +241,40 @@ body {
 .content_container>.right_aside {
     margin-left: 20px;
     width: 300px;
+}
+
+.right_aside>.user {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.user>.user_pic {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: url("https://thumbs.dreamstime.com/b/default-avatar-photo-placeholder-profile-picture-default-avatar-photo-placeholder-profile-picture-eps-file-easy-to-edit-125707135.jpg");
+    background-position: center;
+    background-size: contain;
+}
+
+.user>.user_details {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.username {
+    font-weight: bold;
+}
+
+.names {
+    font-size: 13px;
+    color: #7d7d7d;
 }
 
 .image_post {
@@ -385,12 +428,7 @@ body {
 /* .right_aside>.user {
  
 }*/
-.right_aside>.post_stats {
-    border-radius: 30px;
-    width: 300px;
-    height: 80px;
-    background-color: rgb(255, 255, 255);
-}
+
 
 .content {
     width: 100vw;
@@ -629,10 +667,28 @@ body {
     flex-direction: column;
     gap: 20px;
     width: 400px;
-    height: 650px;
+    height: 700px;
     border-radius: 30px;
     box-shadow: 0 0 100px 10px rgba(132, 132, 132, 0.366);
     background-color: rgb(255, 255, 255);
+}
+
+.register-form>.profile_input {
+    width: 140px;
+    height: 140px;
+    border: rgb(175, 175, 175) dashed 4px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 11px;
+    color: rgba(0, 0, 0, 0.514);
+    cursor: pointer;
+    margin-bottom: 60px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .register-form input {
@@ -665,41 +721,11 @@ body {
     cursor: pointer;
 }
 
-.register-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding-bottom: 100px;
-}
-
 .register-header img {
     width: 40%;
     padding: 20px;
 }
 
-.close-btn {
-    width: 40px !important;
-    height: 40px;
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: transparent !important;
-    top: 20px;
-    right: 20px;
-    transition: all .3s ease-in-out;
-    cursor: pointer;
-}
-
-.close-btn>img {
-    width: 30px !important;
-}
-
-.close-btn:hover {
-    transform: rotate(45deg);
-}
 
 .login_toggle {
     display: none;

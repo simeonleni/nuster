@@ -11,6 +11,9 @@ public class User {
   @Column(name = "id", nullable = false)
   private String username;
 
+  @Column(name = "image", nullable = true, columnDefinition = "TEXT")
+  private String image;
+
   @Column(name = "name", nullable = false)
   private String name;
 
@@ -26,6 +29,14 @@ public class User {
 
   public void setUsername(String username) {
     this.username = username;
+  }
+
+  public String getImage() {
+    return image;
+  }
+
+  public void setImage(String image) {
+    this.image = image;
   }
 
   public String getName() {

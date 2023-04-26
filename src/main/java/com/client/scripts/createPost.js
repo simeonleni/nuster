@@ -58,7 +58,6 @@ const addPost = (title, creator, image, descriptions) => {
         });
 };
 
-// add event listeners
 elements.imageInput.addEventListener('click', () => {
     elements.fileInput.click();
 });

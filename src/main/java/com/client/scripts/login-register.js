@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+    let image = "";
     const userAgent = navigator.userAgent;
     const session = userAgent.toString().replace(/\s/g, "");
 
@@ -16,9 +17,37 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     };
 
-    const newUser = (name, surname, username, password) => {
+    const profilePic = document.querySelector(".profile_input");
+
+    profilePic.addEventListener("click", () => {
+        const fileInput = document.createElement("input");
+        fileInput.type = "file";
+        fileInput.accept = "image/*";
+        fileInput.style.display = "none";
+        fileInput.addEventListener("change", () => {
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function () {
+                image = reader.result;
+                profilePic.style.backgroundImage = `url('${reader.result}')`;
+            };
+            reader.readAsDataURL(file);
+        });
+        document.body.appendChild(fileInput);
+        fileInput.click();
+        fileInput.remove();
+    });
+
+    profilePic.addEventListener("keypress", (event) => {
+        if (event.key === "Enter") {
+            profilePic.click();
+        }
+    });
+
+    const newUser = (name, image, surname, username, password) => {
         const appUser = {
             username: username,
+            image: image,
             name: name,
             surname: surname,
             password: password,
@@ -33,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const loginHandler = () => {
         const loginWrapper = document.querySelector(".login-wrapper");
-        const registerWrapper = document.querySelector(".register_wrapper");
+        const registerWrapper = document.querySelector(".register-wrapper");
         const loginForm = document.querySelector(".login-form");
         const usernameInput = document.querySelector(".username-input");
         const passwordInput = document.querySelector(".password-input");
@@ -51,10 +80,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 const response = await axios.get("http://localhost:8080/users");
                 const userData = response.data;
                 const foundUser = userData.some((user) => user.username === username);
-                const foundPassword = userData.some(
-                    (user) => user.password === password
-                );
-                console.log(foundUser)
+                const foundPassword = userData.some((user) => user.password === password);
+
                 usernameInput.style.border = foundUser
                     ? "1px solid green"
                     : "1px solid red";
@@ -69,16 +96,14 @@ document.addEventListener("DOMContentLoaded", () => {
             } catch (error) {
                 console.error(error);
             }
-
         });
 
         createUserBtn.addEventListener("click", () => {
-            registerHandler()
+            registerHandler();
             loginWrapper.style.display = "none";
             registerWrapper.style.display = "flex";
         });
     };
-
     const registerHandler = () => {
         const registerForm = document.querySelector(".register-form");
         const nameInput = document.querySelector(".name-input");
@@ -95,23 +120,21 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         registerForm.addEventListener("submit", (e) => {
+            alert(image);
             e.preventDefault();
-
             const name = nameInput.value.trim();
             const surname = surnameInput.value.trim();
             const username = usernameInput.value.trim();
             const password = passwordInput.value.trim();
 
             if (name === "" || surname === "" || username === "" || password === "") {
-                [nameInput, surnameInput, usernameInput, passwordInput].forEach(
-                    (input) => {
-                        input.style.border =
-                            input.value.trim() === "" ? "1px solid red" : "1px solid green";
-                    }
-                );
+                [nameInput, surnameInput, usernameInput, passwordInput].forEach((input) => {
+                    input.style.border = input.value.trim() === "" ? "1px solid red" : "1px solid green";
+                });
             } else {
-                axios.get('http://localhost:8080/users')
-                    .then(response => {
+                axios
+                    .get("http://localhost:8080/users")
+                    .then((response) => {
                         const userList = response.data;
                         for (let i = 0; i < userList.length; i++) {
                             if (userList[i].username === username) {
@@ -120,16 +143,31 @@ document.addEventListener("DOMContentLoaded", () => {
                             }
                         }
                         usernameInput.style.border = "1px solid green";
-                        newUser(name, surname, username, password);
-                        registerWrapper.style.display = "none";
-                        loginHandler();
+
+                        const appUser = {
+                            username: username,
+                            image: image,
+                            name: name,
+                            surname: surname,
+                            password: password,
+                        };
+                        axios
+                            .post("http://localhost:8080/add/user", appUser)
+                            .then((response) => {
+                                registerWrapper.style.display = "none";
+                                loginHandler();
+                            })
+                            .catch((error) => {
+                                console.error(error);
+                            });
                     })
-                    .catch(error => {
+                    .catch((error) => {
                         console.error(error);
                     });
             }
         });
     };
+
     axios.get('http://localhost:8080/session')
         .then(response => {
             const sessionList = response.data.length;

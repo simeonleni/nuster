@@ -184,6 +184,7 @@ window.onload = function () {
                 for (let i = 0; i < length; i++) {
                     if (data[i].username === user) {
                         const userobject = {
+                            image: data[i].image,
                             username: data[i].username,
                             name: `${data[i].name} ${data[i].surname}`
                         };
@@ -196,13 +197,12 @@ window.onload = function () {
             for (let i = 0; i < postResponse.data.length; i++) {
                 const user = postResponse.data[i].creator;
                 poster(user).then(userobject => {
-                    var left_aside = document.querySelector(".left_aside");
                     var post_supports = 0;
                     var post_oppose = 0;
                     let postTitle = postResponse.data[i].title;
                     let postImg = postResponse.data[i].postImage;
                     let postDescription = postResponse.data[i].descriptions;
-                    let profilePic = "https://thumbs.dreamstime.com/b/default-avatar-photo-placeholder-profile-picture-default-avatar-photo-placeholder-profile-picture-eps-file-easy-to-edit-125707135.jpg";
+                    let profilePic = userobject.image;
                     let studentHandle = userobject.username;
                     let studentName = userobject.name;
 
@@ -219,12 +219,8 @@ window.onload = function () {
 
                     document.querySelector("#post_container").appendChild(postElement);
                 });
-
             }
         });
     };
-
     posts();
-
 }
-
