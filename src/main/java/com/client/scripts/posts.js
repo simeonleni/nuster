@@ -190,6 +190,58 @@ window.onload = function () {
         return text_post;
 
     }
+    const searched = (value) => {
+        axios.get("http://localhost:8080/posts").then(postResponse => {
+            const poster = async (user) => {
+                const userResponse = await axios.get("http://localhost:8080/users");
+                const length = userResponse.data.length;
+                const data = userResponse.data;
+                for (let i = 0; i < length; i++) {
+                    if (data[i].username === user) {
+                        const userobject = {
+                            image: data[i].image,
+                            username: data[i].username,
+                            name: `${data[i].name} ${data[i].surname}`
+                        };
+                        return userobject;
+                    }
+                }
+                return null;
+            };
+
+            for (let i = 0; i < postResponse.data.length; i++) {
+                const user = postResponse.data[i].creator;
+                poster(user).then(userobject => {
+                    var post_supports = 0;
+                    var post_oppose = 0;
+                    let postTitle = postResponse.data[i].title;
+                    let postImg = postResponse.data[i].postImage;
+                    let postDescription = postResponse.data[i].descriptions;
+                    let profilePic = userobject.image;
+                    let studentHandle = userobject.username;
+                    let studentName = userobject.name;
+
+                    let postElement;
+                    if (postResponse.data[i].title.includes(value)) {
+                        if (postResponse.data[i].postImage === "") {
+                            postElement = text_post_module(postTitle, postDescription, post_supports, post_oppose, profilePic, studentHandle, studentName);
+                        } else {
+                            postElement = image_post_module(postImg, postTitle, postDescription, post_supports, post_oppose, profilePic, studentHandle, studentName);
+                        }
+
+                        postElement.addEventListener("click", () => {
+                            alert(`Post ID: ${postResponse.data[i].id}, Post Title: ${postResponse.data[i].title}`);
+                        });
+
+                        document.querySelector("#post_container").appendChild(postElement);
+
+                    }
+                });
+            }
+        });
+    };
+
+
     const posts = () => {
         axios.get("http://localhost:8080/posts").then(postResponse => {
             const poster = async (user) => {
@@ -214,9 +266,6 @@ window.onload = function () {
                 poster(user).then(userobject => {
                     var post_supports = 0;
                     var post_oppose = 0;
-
-                    liking(post_supports, post_oppose, postResponse.data[i].id);
-
                     let postTitle = postResponse.data[i].title;
                     let postImg = postResponse.data[i].postImage;
                     let postDescription = postResponse.data[i].descriptions;
@@ -240,8 +289,17 @@ window.onload = function () {
             }
         });
     };
-    const search = (query) => {
-
-    };
     posts();
+    document.querySelector(".search").addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        document.querySelector("#post_container").innerHTML = "";
+        const input = document.querySelector(".search_input");
+        const value = input.value;
+        searched(value)
+    });
+    document.querySelector(".home").addEventListener("click", () => {
+        document.querySelector("#post_container").innerHTML = "";
+        posts();
+    })
 }
