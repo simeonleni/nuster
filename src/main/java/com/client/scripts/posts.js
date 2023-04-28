@@ -75,6 +75,21 @@ window.onload = function () {
                 support_count.innerHTML = Math.max(parseInt(support_count.innerHTML) - 1, 0);
             }
         });
+        const liking = (supportCount, opposeCount, id) => {
+            const likeData = {
+                id: id,
+                supportCount: supportCount,
+                opposeCount: opposeCount
+            }
+            axios.post("http://localhost:8080/like", likeData)
+                .then(() => { })
+                .catch((error) => {
+                    console.log(error);
+                })
+        }
+
+
+
 
         support.appendChild(supportBtn);
         support.appendChild(support_count);
@@ -199,6 +214,9 @@ window.onload = function () {
                 poster(user).then(userobject => {
                     var post_supports = 0;
                     var post_oppose = 0;
+
+                    liking(post_supports, post_oppose, postResponse.data[i].id);
+
                     let postTitle = postResponse.data[i].title;
                     let postImg = postResponse.data[i].postImage;
                     let postDescription = postResponse.data[i].descriptions;
@@ -223,7 +241,7 @@ window.onload = function () {
         });
     };
     const search = (query) => {
-        
+
     };
     posts();
 }
