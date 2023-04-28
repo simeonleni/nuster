@@ -156,6 +156,35 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     };
+
+    const userData = () => {
+        const user_pic = document.querySelector(".user_pic");
+        const username = document.querySelector(".username");
+        const name = document.querySelector(".name");
+        const surname = document.querySelector(".surname");
+
+        axios.get('http://localhost:8080/session')
+            .then(response => {
+                for (let i = 0; i < response.data.length; i++) {
+                    if (response.data[i].session === session) {
+                        axios.get("http://localhost:8080/users")
+                            .then(useresponse => {
+                                for (let j = 0; j < useresponse.data.length; j++) {
+                                    if (useresponse.data[j].username === response.data[i].user) {
+                                        username.innerHTML = response.data[i].user;
+                                        user_pic.style.backgroundImage = `url('${useresponse.data[j].image}')`;
+                                        name.innerHTML = useresponse.data[j].name;
+                                        surname.innerHTML = useresponse.data[j].surname;
+                                    }
+                                }
+                            })
+                    }
+                }
+            })
+
+    }
+    userData();
+
     axios.get('http://localhost:8080/session')
         .then(response => {
             const sessionList = response.data.length;
