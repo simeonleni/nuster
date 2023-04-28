@@ -1,1 +1,1 @@
-TRUNCATE TABLE user;
+drop TABLE post

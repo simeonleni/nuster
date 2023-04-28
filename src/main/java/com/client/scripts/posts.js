@@ -222,5 +222,8 @@ window.onload = function () {
             }
         });
     };
+    const search = (query) => {
+        
+    };
     posts();
 }

@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 
 @Entity
 public class Post {
@@ -19,7 +20,8 @@ public class Post {
   @Column(name = "creator", nullable = false)
   private String creator;
 
-  @Column(name = "post_image", nullable = true, columnDefinition = "TEXT")
+  @Lob
+  @Column(name = "post_image", length = 10485760)
   private String postImage;
 
   @Column(name = "descriptions", nullable = false)
