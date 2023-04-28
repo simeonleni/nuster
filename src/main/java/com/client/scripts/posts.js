@@ -292,6 +292,7 @@ window.onload = function () {
     posts();
     document.querySelector(".search").addEventListener("submit", (e) => {
         e.preventDefault();
+        window.location.reload(true);
 
         document.querySelector("#post_container").innerHTML = "";
         const input = document.querySelector(".search_input");
@@ -299,6 +300,7 @@ window.onload = function () {
         searched(value)
     });
     document.querySelector(".home").addEventListener("click", () => {
+        window.location.reload(true);
         document.querySelector("#post_container").innerHTML = "";
         posts();
     })
